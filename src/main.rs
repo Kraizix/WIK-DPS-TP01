@@ -9,10 +9,9 @@ fn main() {
     dotenv().ok();
     let host;
     match env::var("PING_LISTEN_PORT"){
-        Ok(val) => host = format!("127.0.0.1:{val}"),
-        Err(_e) => host = "127.0.0.1:7878".to_string(),
+        Ok(val) => host = format!("0.0.0.0:{val}"),
+        Err(_e) => host = "0.0.0.0:7878".to_string(),
     };
-    println!("Listening on: {}", host);
     let listener = TcpListener::bind(host).unwrap();
     for stream in listener.incoming() {
         let stream = stream.unwrap();

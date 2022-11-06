@@ -16,3 +16,28 @@ Il ne reste plus qu'à build et run le projet via l'invite de commandes dans le 
 - `cd WIK-DPS-TP01`
 - `cargo build`
 - `cargo run`
+
+### Docker:
+
+Build l'image :
+`docker build -t webapi .`
+
+Run le container :
+`docker run -p 8080:7878 --rm --name webapi1 webapi`
+
+Scan de l'image :
+`docker scan webapi`
+
+```
+@kevin ➜ wik_dps_tp01 git(main) docker scan webapi
+
+Testing webapi...
+
+Package manager:   apk
+Project name:      docker-image|webapi
+Docker image:      webapi
+Platform:          linux/amd64
+Base image:        alpine:3.16.2
+
+✔ Tested 26 dependencies for known vulnerabilities, no vulnerable paths found.
+```
