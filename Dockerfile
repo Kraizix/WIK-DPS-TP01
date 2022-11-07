@@ -1,21 +1,24 @@
-FROM rust:1.64.0-alpine
+# docker build -t wik-dps-tp02-rust-multi -f multi-stage.dockerfile .
+FROM rust:1.64.0-alpine AS builder
 
-RUN USER=root cargo new --bin WIK_DPS_TP01
-WORKDIR /WIK_DPS_TP01
+WORKDIR /build
 
-COPY ./Cargo.lock ./Cargo.lock
-COPY ./Cargo.toml ./Cargo.toml
+RUN cargo new --bin wik_dps_tp01
+WORKDIR /build/wik_dps_tp01
 
+COPY Cargo.* ./
 RUN cargo build --release
 RUN rm src/*.rs
+RUN rm ./target/release/deps/wik_dps_tp01*
 
 COPY ./src ./src
-
-RUN rm ./target/release/deps/wik_dps_tp01*
 RUN cargo build --release
 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 USER appuser
 
-CMD ["./target/release/wik_dps_tp01"]
+FROM scratch
+COPY --from=builder /build/wik_dps_tp01/target/release/wik_dps_tp01 /app
+
+CMD ["/app"]

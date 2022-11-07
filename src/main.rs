@@ -25,7 +25,8 @@ fn handle_connection(mut stream: TcpStream) {
     let buf_reader = BufReader::new(&mut stream);
     let request: Vec<_> = buf_reader.lines().map(|result | result.unwrap()).take_while(|line| !line.is_empty()).collect();
     let request_line = &request[0];
-    if request_line == "GET /ping HTTP/1.1" {
+    if request_line == "GET /ping HTTP/1.0" {
+        println!("Hostname: {:?}", hostname::get());
         let status_line = "HTTP/1.1 200 OK";
         let mut res: Vec<String> = Vec::new();
         for data in request[1..].into_iter() {
@@ -35,7 +36,7 @@ fn handle_connection(mut stream: TcpStream) {
         let response = format!("{status_line}\r\nContent-Type: application/json\r\n\r\n{{{}}}",res.join(","));
         stream.write_all(response.as_bytes()).unwrap();
     } else {
-        let status_line = "HTTP/1.1 404 NOT FOUND\r\n\r\n";
+        let status_line = format!("HTTP/1.1 404 NOT FOUND\r\n\r\n");
         stream.write_all(status_line.as_bytes()).unwrap();
     }
 }
