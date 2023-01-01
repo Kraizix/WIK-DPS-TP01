@@ -41,3 +41,42 @@ Base image:        alpine:3.16.2
 
 ✔ Tested 26 dependencies for known vulnerabilities, no vulnerable paths found.
 ```
+
+![](https://i.imgur.com/VOlpyAY.png)
+
+### Kubernetes:
+
+Port-forwarding :
+
+```
+@kevin ➜ wik_dps_tp01 git(main) kubectl port-forward echo 8080:8080
+Forwarding from 127.0.0.1:8080 -> 8080
+Forwarding from [::1]:8080 -> 8080
+Handling connection for 8080
+Handling connection for 8080
+```
+
+ReplicaSet:
+
+```
+@kevin ➜ wik_dps_tp01 git(main) kubectl apply -f simple_rs.yaml
+replicaset.apps/echo-rs created
+@kevin ➜ wik_dps_tp01 git(main) kubectl get pod
+NAME            READY   STATUS    RESTARTS   AGE
+echo-rs-9whn8   1/1     Running   0          15s
+echo-rs-n9sj2   1/1     Running   0          15s
+echo-rs-pjp4c   1/1     Running   0          15s
+echo-rs-vwl57   1/1     Running   0          15s
+@kevin ➜ wik_dps_tp01 git(main) kubectl port-forward echo-rs-9whn8 8080:8080
+Forwarding from 127.0.0.1:8080 -> 8080
+Forwarding from [::1]:8080 -> 8080
+Handling connection for 8080
+@kevin ➜ wik_dps_tp01 git(main) kubectl port-forward echo-rs-n9sj2 8080:8080
+Forwarding from 127.0.0.1:8080 -> 8080
+Forwarding from [::1]:8080 -> 8080
+Handling connection for 8080
+```
+
+Ingress:
+
+![](https://i.imgur.com/XjVCoh2.png)
